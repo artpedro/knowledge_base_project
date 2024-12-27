@@ -1,8 +1,13 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, render_template
 
-def setup_routes(app):
-    @app.route("/")
-    def home():
-        return jsonify({"message": "Flask backend is running!"})
+# Create a blueprint for the application routes
+main = Blueprint("main", __name__)
 
-    # Add more routes here
+@main.route("/")
+def home():
+    """
+    Render the home page.
+    """
+    return render_template("home.html")
+
+# Add more routes as needed
