@@ -1,5 +1,7 @@
 # Core requirements
-flask                # Web framework
+flask
+flask-cors
+gunicorn                # Web framework
 milvus               # Milvus client library
 pymilvus
 
