@@ -59,6 +59,20 @@ services:
     depends_on:
       - "etcd"
       - "minio"
+  
+  flask_app:
+    build:
+      context: .
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=True
+    depends_on:
+      - standalone
+
 
 networks:
   default:
