@@ -1,0 +1,30 @@
+# Core requirements
+flask                # Web framework
+milvus               # Milvus client library
+pymilvus
+
+# Web scraping
+beautifulsoup4       # For HTML parsing
+scrapy               # For advanced web scraping
+selenium             # Optional, for dynamic content scraping
+
+# NLP and embeddings
+sentence-transformers # Pretrained models for embeddings
+transformers          # Hugging Face models (e.g., summarization)
+
+# Data handling
+pandas               # Data processing
+numpy                # Numerical computations
+
+# Development and testing
+pytest               # Testing framework
+black                # Code formatter
+
+# Visualization (optional)
+plotly               # For data visualization
+
+# Scheduler (optional, for periodic scraping)
+apscheduler          # Task scheduler
+
+# Tests
+pytest
