@@ -1,12 +1,12 @@
 from pymilvus import connections, Collection, FieldSchema, CollectionSchema, DataType, utility
 from sentence_transformers import SentenceTransformer
 import logging
-
+import os
 
 class MilvusClient:
-    def __init__(self, host="localhost", port="19530", collection_name="ai_ml_knowledge"):
-        self.host = host
-        self.port = port
+    def __init__(self, host=None, port=None, collection_name="ai_ml_knowledge"):
+        self.host = host or os.getenv("MILVUS_HOST", "localhost")
+        self.port = port or os.getenv("MILVUS_PORT", "19530")
         self.collection_name = collection_name
         self.dimension = 384  # Embedding vector dimension
         self.embedder = SentenceTransformer("all-MiniLM-L6-v2")
