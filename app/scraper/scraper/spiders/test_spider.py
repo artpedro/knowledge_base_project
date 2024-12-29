@@ -18,10 +18,9 @@ class ArticlesSpider(scrapy.Spider):
 
             job = redis_client.hgetall(job_id)
             url = job["url"]
-            category = job.get("category", "General")
 
             # Start scraping the job URL
-            yield scrapy.Request(url, self.parse_article, meta={"category": category, "job_id": job_id})
+            yield scrapy.Request(url, self.parse_article, meta={"job_id": job_id})
 
     def parse_article(self, response):
         # Extract article content
@@ -29,7 +28,6 @@ class ArticlesSpider(scrapy.Spider):
         item["title"] = response.css("h1.article-title::text").get()
         item["text"] = " ".join(response.css("div.article-body p::text").getall())
         item["url"] = response.url
-        item["category"] = response.meta["category"]
 
         # Mark the job as complete in Redis
         job_id = response.meta["job_id"]

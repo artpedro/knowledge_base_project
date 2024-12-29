@@ -4,37 +4,25 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 
-# useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
-from app.milvus_handler.milvus_client import MilvusClient
-import os
+import redis
+import json
 
 class ArticlePipeline:
     def open_spider(self, spider):
-        # Connect to Milvus using environment variables
-        milvus_host = os.getenv("MILVUS_HOST", "localhost")
-        milvus_port = os.getenv("MILVUS_PORT", "19530")
-        self.client = MilvusClient(host=milvus_host, port=milvus_port)
-        # Load categories from an external file
-        self.categories = []
-        categories_file_path = os.path.join(os.path.dirname(__file__), "categories.txt")
-        with open(categories_file_path, "r") as file:
-            self.categories = [line.strip() for line in file]
-
+        # Connect to Redis
+        self.redis_client = redis.StrictRedis(host="redis", port=6379, decode_responses=True)
 
     def process_item(self, item, spider):
-        # Clean and categorize the content
-        categories = self.categorizer.categorize(item["text"], self.categories)
-
-        # Insert data into Milvus
-        self.client.insert_data(
-            titles=[item["title"]],
-            texts=[item["text"]],
-            category=categories,
-            source_url=item["url"]
-        )
+        # Prepare data for queuing
+        job_data = {
+            "title": item["title"],
+            "text": item["text"],
+            "url": item["url"],
+        }
+        # Push data to the Redis queue
+        self.redis_client.rpush("article_processing_queue", json.dumps(job_data))
+        spider.logger.info(f"Pushed job to queue: {job_data['title']}")
         return item
 
-
     def close_spider(self, spider):
-        print("Finished processing articles.")
+        spider.logger.info("Spider closed.")

@@ -18,3 +18,4 @@ Multimodal AI
 AI Hardware Optimization
 AI in Finance
 Human-Centered AI
+Data Science
