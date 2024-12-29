@@ -60,6 +60,25 @@ services:
       - "etcd"
       - "minio"
   
+  scraper:
+    build:
+      context: ./app/scraper
+    container_name: scraper
+    environment:
+      - MILVUS_HOST=standalone
+      - MILVUS_PORT=19530
+    volumes:
+      - ./app/scraper:/scraper
+    entrypoint: ["scrapy", "crawl", "articles"]  # Automatically runs this command
+    depends_on:
+      - standalone
+      
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
   flask_app:
     build:
       context: .

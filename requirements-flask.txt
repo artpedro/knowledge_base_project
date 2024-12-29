@@ -2,6 +2,7 @@ flask
 flask-cors
 gunicorn 
 
+redis
 
 # For testing
 sentence-transformers # Pretrained models for embeddings

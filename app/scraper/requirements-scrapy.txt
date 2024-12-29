@@ -1,0 +1,5 @@
+scrapy
+pymilvus
+requests
+scrapy-redis
+redis
