@@ -41,7 +41,7 @@ class MilvusClient:
                 FieldSchema(name="vector", dtype=DataType.FLOAT_VECTOR, dim=self.dimension),
                 FieldSchema(name="title", dtype=DataType.VARCHAR, max_length=512),
                 FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=2048),
-                FieldSchema(name="category", dtype=DataType.VARCHAR, max_length=256),
+                FieldSchema(name="categories", dtype=DataType.JSON),
                 FieldSchema(name="source_url", dtype=DataType.VARCHAR, max_length=512),
             ]
             schema = CollectionSchema(fields=fields, description="Knowledge collection")
@@ -61,54 +61,57 @@ class MilvusClient:
         collection.load()
         logging.info(f"Collection '{self.collection_name}' is loaded into memory.")
 
-    def insert_data(self, titles, texts, category="General", source_url="N/A"):
+    def insert_data(self, titles, texts, categories=None, source_url="N/A"):
         """
-        Inserts documents into the collection with their embeddings, checking for duplicates.
+        Inserts documents into the collection with their embeddings, supporting multi-category classification.
+
+        :param titles: List of document titles.
+        :param texts: List of document texts.
+        :param categories: List of categories for each document (default: empty list).
+        :param source_url: Source URL for the documents.
         """
         self._ensure_collection_ready()
 
         if len(titles) != len(texts):
             raise ValueError("Titles and texts must have the same length.")
 
+        if categories is None:
+            categories = [[]] * len(texts)  # Default to empty categories
+
         collection = Collection(self.collection_name)
 
-        # Track documents to insert and duplicates
         docs_to_insert = []
         skipped_count = 0
 
         for i in range(len(texts)):
             # Escape quotes in the text for the query expression
-            escaped_text = texts[i].replace('"', '\\"')  # Escape quotes before using in the f-string
+            escaped_text = texts[i].replace('"', '\\"')
             expr = f'text == "{escaped_text}"'
             results = collection.query(expr, output_fields=["text"], limit=1)
 
-            if not results:  # If no match is found
-                docs_to_insert.append((titles[i], texts[i]))
+            if not results:
+                docs_to_insert.append((titles[i], texts[i], categories[i]))
             else:
                 skipped_count += 1
 
         if docs_to_insert:
-            # Combine title and text for embedding generation
-            combined_docs = [f"{title}: {text}" for title, text in docs_to_insert]
+            combined_docs = [f"{title}: {text}" for title, text, _ in docs_to_insert]
             embeddings = [self.embedder.encode(doc).tolist() for doc in combined_docs]
 
-            # Prepare data for insertion
             data = [
                 {
                     "vector": embeddings[i],
                     "title": docs_to_insert[i][0],
                     "text": docs_to_insert[i][1],
-                    "category": category,
+                    "categories": docs_to_insert[i][2],  # Multi-category support
                     "source_url": source_url,
                 }
                 for i in range(len(docs_to_insert))
             ]
 
-            # Insert data into Milvus
             collection.insert(data)
             logging.info(f"Inserted {len(docs_to_insert)} documents into '{self.collection_name}'.")
 
-            # Explicitly flush to persist data
             collection.flush()
             logging.info("Data flushed to disk.")
         else:
