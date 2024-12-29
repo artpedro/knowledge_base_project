@@ -74,9 +74,10 @@ class MilvusClient:
 
         if len(titles) != len(texts):
             raise ValueError("Titles and texts must have the same length.")
-
+        
+        # Default to empty categories
         if categories is None:
-            categories = [[]] * len(texts)  # Default to empty categories
+            categories = [[]] * len(texts)  
 
         collection = Collection(self.collection_name)
 
@@ -103,7 +104,7 @@ class MilvusClient:
                     "vector": embeddings[i],
                     "title": docs_to_insert[i][0],
                     "text": docs_to_insert[i][1],
-                    "categories": docs_to_insert[i][2],  # Multi-category support
+                    "categories": docs_to_insert[i][2], 
                     "source_url": source_url,
                 }
                 for i in range(len(docs_to_insert))
@@ -127,8 +128,9 @@ class MilvusClient:
 
         query_vector = self.embedder.encode(query_text).tolist()
         search_params = {"metric_type": "L2", "params": {"nprobe": 10}}
-        expr = f"category == '{category_filter}'" if category_filter else None
-
+        if category_filter:
+            expr = f"'{{{category_filter}}}' in categories"
+    
         collection = Collection(self.collection_name)
         results = collection.search(
             data=[query_vector],

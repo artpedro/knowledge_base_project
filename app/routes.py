@@ -48,11 +48,11 @@ def scrape():
     if not data or "url" not in data:
         return jsonify({"status": "error", "message": "URL is required."}), 400
 
-    job = {"url": data["url"], "category": data.get("category", "General")}
-    job_id = f"job_{redis_client.incr('job_counter')}"  # Generate a unique job ID
+    job = {"url": data["url"]}
+    job_id = f"job_{redis_client.incr('job_counter')}"
 
-    redis_client.hset(job_id, mapping=job)  # Store job details in Redis
-    redis_client.lpush("scrape_jobs", job_id)  # Add job ID to the queue
+    redis_client.hset(job_id, mapping=job)
+    redis_client.lpush("scrape_jobs", job_id)
 
     return jsonify({"status": "success", "job_id": job_id}), 202
 
