@@ -29,6 +29,8 @@ def health():
         status = {
             "flask_tests": results.get("flask_tests", "Unknown"),
             "database_tests": results.get("database_tests", "Unknown"),
+            "cleaner_tests": results.get("cleaner_tests", "Unknown"),
+            "classifier_tests": results.get("classifier_tests", "Unknown"),
             "status": "Healthy" if all(v == "Passed" for v in results.values()) else "Unhealthy"
         }
     except Exception as e:
