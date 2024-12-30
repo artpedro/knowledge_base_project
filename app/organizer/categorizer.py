@@ -17,4 +17,5 @@ class ContentCategorizer:
         labels = [
             label for label, score in zip(result["labels"], result["scores"]) if score >= threshold
         ]
+        print(labels)
         return labels
