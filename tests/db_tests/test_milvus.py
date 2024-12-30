@@ -34,21 +34,15 @@ class TestMilvusClient(unittest.TestCase):
         print("[PASS] Collection creation test passed.")
 
     def test_insert_documents(self):
-        """
-        Test inserting documents into the collection.
-        """
-        # Ensure collection is clear before testing
-        self.client.clear_collection()
-
-        # Insert data
-        inserted_count, skipped_count = self.client.insert_data(
-            self.test_titles, self.test_texts
+        result = self.client.insert_data(
+            title="Test Title",
+            author="Test Author",
+            date="01-01-2023",
+            text="This is a test text.",
+            categories=["Category1", "Category2"]
         )
+        self.assertEqual(result["status"], "success")
         
-        self.assertEqual(inserted_count, len(self.test_titles))
-        self.assertEqual(skipped_count, 0)
-        print(f"[PASS] Insert documents test passed. Inserted: {inserted_count}, Skipped: {skipped_count}")
-
     def test_duplicate_detection(self):
         """
         Test that duplicates are correctly detected and skipped.
