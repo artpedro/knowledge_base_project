@@ -42,19 +42,31 @@ def health():
 @main.route("/scrape", methods=["POST"])
 def scrape():
     """
-    Add a scraping job to the Redis queue.
+    Add a scraping job to the Redis queue or trigger all spiders.
     """
-    data = request.json
-    if not data or "url" not in data:
-        return jsonify({"status": "error", "message": "URL is required."}), 400
+    if request.content_type == "application/json":
+        # Handle JSON payload
+        data = request.json or {}
+    elif request.content_type == "application/x-www-form-urlencoded":
+        # Handle form submission
+        data = request.form.to_dict()
+    else:
+        # Unsupported Content-Type
+        return jsonify({"status": "error", "message": "Unsupported Content-Type"}), 415
 
-    job = {"url": data["url"]}
-    job_id = f"job_{redis_client.incr('job_counter')}"
+    url = data.get("url")
+    if url:
+        # Add a specific scraping job
+        job = {"url": url}
+        job_id = f"job_{redis_client.incr('job_counter')}"
+        redis_client.hset(job_id, mapping=job)
+        redis_client.lpush("scrape_jobs", job_id)
+        return jsonify({"status": "success", "job_id": job_id}), 202
+    else:
+        # Trigger all spiders
+        redis_client.publish("trigger_all_spiders", "run_all")
+        return jsonify({"status": "success", "message": "All spiders triggered."}), 202
 
-    redis_client.hset(job_id, mapping=job)
-    redis_client.lpush("scrape_jobs", job_id)
-
-    return jsonify({"status": "success", "job_id": job_id}), 202
 
 
 @main.route("/scrape_status/<job_id>", methods=["GET"])

@@ -75,7 +75,13 @@
       <a class="block text-blue-600 text-lg font-semibold mb-2" href="/scrape">
        <i class="fas fa-spider">
        </i>
-       Scrape
+       <form id="scrape-form" method="POST" action="/scrape">
+        <button 
+            type="submit" 
+            class="bg-blue-600 text-white px-4 py-2 rounded">
+            Trigger Scraper
+        </button>
+    </form>
       </a>
       <p class="text-gray-700">
        Trigger the web scraper to collect new data.
