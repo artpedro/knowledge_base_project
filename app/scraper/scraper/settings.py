@@ -24,7 +24,7 @@ REDIS_HOST = "redis"
 REDIS_PORT = 6379
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
 # Configure pipelines (used for processing scraped items)
 ITEM_PIPELINES = {

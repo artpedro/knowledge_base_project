@@ -1,6 +1,7 @@
+import scrapy
 from datetime import datetime
 
-class KDnuggetsSpider:
+class KDnuggetsSpider(scrapy.Spider):
     name = "kdnuggets"
     allowed_domains = ["kdnuggets.com"]
     start_urls = ["https://www.kdnuggets.com/news/index.html"]
