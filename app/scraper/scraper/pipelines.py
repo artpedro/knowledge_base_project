@@ -16,8 +16,11 @@ class ArticlePipeline:
         # Prepare data for queuing
         job_data = {
             "title": item["title"],
+            "author": item["author"],
+            "date": item["date"],
             "text": item["text"],
             "url": item["url"],
+
         }
         # Push data to the Redis queue
         self.redis_client.rpush("article_processing_queue", json.dumps(job_data))
