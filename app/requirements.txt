@@ -1,0 +1,10 @@
+milvus               # Milvus client library
+pymilvus
+redis
+
+
+scrapy               # For advanced web scraping
+
+# NLP and embeddings
+sentence-transformers # Pretrained models for embeddings
+transformers          # Hugging Face models (e.g., summarization)
