@@ -22,6 +22,7 @@ class ArticlePipeline:
             "url": item["url"],
 
         }
+        print("pushing to queue")
         # Push data to the Redis queue
         self.redis_client.rpush("article_processing_queue", json.dumps(job_data))
         spider.logger.info(f"Pushed job to queue: {job_data['title']}")
