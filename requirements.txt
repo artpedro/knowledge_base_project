@@ -4,6 +4,7 @@ flask-cors
 gunicorn                # Web framework
 milvus               # Milvus client library
 pymilvus
+redis
 
 # Web scraping
 beautifulsoup4       # For HTML parsing

@@ -42,4 +42,3 @@ def main():
             process_article(job)
         except Exception as e:
             print(f"Error processing job: {e}")
-            # Optionally re-queue or log the job

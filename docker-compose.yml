@@ -59,6 +59,8 @@ services:
     depends_on:
       - "etcd"
       - "minio"
+    logging:
+      driver: none 
   
   flask_app:
     build:
@@ -94,16 +96,21 @@ services:
 
   worker:
     build:
-      context: ./app/worker
+      context: .
+      dockerfile: app/worker/Dockerfile
     container_name: worker
     depends_on:
       - redis
+      - standalone
+    volumes:
+      - ./app:/worker/app
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - MILVUS_HOST=milvus
+      - MILVUS_HOST=standalone
       - MILVUS_PORT=19530
-    
+      - PYTHONPATH=/worker/app
+  
 networks:
   default:
     name: milvus
