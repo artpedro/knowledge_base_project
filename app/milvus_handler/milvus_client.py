@@ -125,7 +125,7 @@ class MilvusClient:
         Searches for similar text in the collection based on embeddings.
         """
         self._ensure_collection_ready()
-
+        expr = None
         query_vector = self.embedder.encode(query_text).tolist()
         search_params = {"metric_type": "L2", "params": {"nprobe": 10}}
         if category_filter:
