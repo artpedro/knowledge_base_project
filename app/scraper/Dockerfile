@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir -r requirements-scrapy.txt
 COPY . .
 
 # Set default command to run Scrapy spiders
-CMD ["scrapy", "crawl", "articles"]
+CMD ["scrapy","crawl","kdnuggets"]
