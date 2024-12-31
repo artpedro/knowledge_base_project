@@ -1,11 +1,8 @@
 
-from langchain_milvus import Milvus
-from sentence_transformers import SentenceTransformer
 from langchain_openai import ChatOpenAI
+from sentence_transformers import SentenceTransformer
 import os
-import json
 from dotenv import load_dotenv
-import os
 from app.milvus_handler.milvus_client import MilvusClient
 
 # Load environment variables from the .env file
@@ -14,10 +11,10 @@ load_dotenv()
 # Constants for configuration
 MILVUS_HOST = 'standalone'
 MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
-collection_name = "ai_ml_knowledge"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 print(OPENAI_API_KEY)
 print(MILVUS_HOST)
+collection_name = "ai_ml_knowledge"
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 model = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-4o-mini")
     
@@ -49,12 +46,16 @@ def retrieve_and_generate(query):
     """
     # Initialize the vector store and retriever
     milvus_client = initialize_milvus_vectorstore()
+    # Query database
     search_res = milvus_client.search_similar(query, category_filter=None, limit=3)
+
+    # Loading content
     context = ""
     for i in search_res:
         context += i["text"] + "\n"
     print(context)
 
+    # Generate response
     prompt = PROMPT.format(context=context, question=query)
     response = model.invoke([{"role": "system", "content": prompt}])
 
