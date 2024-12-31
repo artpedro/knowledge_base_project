@@ -2,7 +2,7 @@ from transformers import pipeline
 
 class ContentCategorizer:
     def __init__(self):
-        self.classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+        self.classifier = pipeline("zero-shot-classification", model="MoritzLaurer/mDeBERTa-v3-base-mnli-xnli")
 
     def categorize(self, text, candidate_labels, threshold=0.3, multi_label=True):
         """
