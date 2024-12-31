@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from dateutil import parser
 from pymilvus import connections, Collection, FieldSchema, CollectionSchema, DataType, utility
 from sentence_transformers import SentenceTransformer
 from datetime import datetime
@@ -91,6 +92,10 @@ class MilvusClient:
 
         # Convert the date into a consistent format
         try:
+            # Parse the date using dateutil.parser
+            parsed_date = parser.parse(date)
+            # Convert to the desired format
+            formatted_date = parsed_date.strftime("%Y-%m-%d")
             formatted_date = datetime.strptime(date, "%d-%m-%Y").strftime("%Y-%m-%d")
         except ValueError as e:
             logging.error(f"Invalid date format: {date}. Error: {e}")
