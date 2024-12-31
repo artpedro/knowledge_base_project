@@ -26,7 +26,9 @@ def run_all_spiders():
     print("Running all Scrapy spiders...")
     try:
         # Trigger all spiders using Scrapy
+        subprocess.run(["python", "scraper/extract_newspaper.py"])
         subprocess.run(["scrapy", "crawl", "kdnuggets"], check=True)
+        
         print("All spiders executed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error running spiders: {e}")

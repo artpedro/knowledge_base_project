@@ -3,3 +3,5 @@ pymilvus
 requests
 scrapy-redis
 redis
+newspaper3k
+lxml_html_clean
