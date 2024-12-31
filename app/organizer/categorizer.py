@@ -9,7 +9,6 @@ class ContentCategorizer:
         Clean and categorize text using multi-label zero-shot classification.
         """
 
-
         # Perform classification
         result = self.classifier(text, candidate_labels, multi_label=multi_label)
 
