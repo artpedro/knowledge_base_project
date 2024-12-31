@@ -10,7 +10,7 @@ import os
 
 class MilvusClient:
     def __init__(self, host=None, port=None, collection_name="ai_ml_knowledge"):
-        self.host = host or os.getenv("MILVUS_HOST", "localhost")
+        self.host = host or os.getenv("MILVUS_HOST", "standalone")
         self.port = port or os.getenv("MILVUS_PORT", "19530")
         self.collection_name = collection_name
         self.dimension = 384  # Embedding vector dimension
