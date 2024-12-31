@@ -164,7 +164,50 @@ class MilvusClient:
 
         logging.info("Search completed.")
         return formatted_results
+    
+    def check_text_existence(self, text, similarity_threshold=0.9):
+        """
+        Checks if the provided text has a similar instance in the database.
 
+        Parameters:
+            text (str): The text to check for similarity.
+            similarity_threshold (float): The similarity score threshold to consider it as existing.
+
+        Returns:
+            dict: A dictionary containing the most similar text and its similarity score if found,
+                or None if no similar text meets the threshold.
+        """
+        self._ensure_collection_ready()
+
+        # Generate embedding for the input text
+        query_vector = self.embedder.encode(text).tolist()
+
+        # Search for the most similar text
+        search_params = {"metric_type": "L2", "params": {"nprobe": 10}}  
+        collection = Collection(self.collection_name)
+        results = collection.search(
+            data=[query_vector],
+            anns_field="vector",
+            param=search_params,
+            limit=1,  # Only return the most similar result
+            output_fields=["text", "title", "author", "date", "categories"]
+        )
+
+        if results[0]:
+            top_result = results[0][0]  # Get the top result
+            similarity_score = 1 - top_result.distance  # Convert distance to similarity score for IP metric
+
+            if similarity_score >= similarity_threshold:
+                return {
+                    "text": top_result.entity.get("text"),
+                    "title": top_result.entity.get("title"),
+                    "author": top_result.entity.get("author"),
+                    "date": top_result.entity.get("date"),
+                    "categories": top_result.entity.get("categories"),
+                    "similarity_score": similarity_score
+                }
+
+        return None  # No similar text found above the threshold
     def count_documents(self):
         """
         Counts the number of documents in the collection.
