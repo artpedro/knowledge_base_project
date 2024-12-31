@@ -20,30 +20,29 @@ def process_article(job, cleaner, categorizer):
     cleaned_text = cleaner.clean_text(job["text"])
     print("Clean text:", cleaned_text)
     cand_cat = [
-    "Natural Language Processing (NLP): Covers techniques for analyzing, understanding, and generating human language. Includes tasks like sentiment analysis, chatbots, machine translation, and text summarization, commonly seen in research and applications for improving communication systems.",
-    "Computer Vision: Focuses on processing and analyzing visual data such as images and videos. Tutorials and news often highlight topics like object detection, facial recognition, autonomous vehicles, and medical imaging advancements.",
-    "Reinforcement Learning: Discusses agents learning optimal actions through trial-and-error interactions with an environment. Popular for robotics, autonomous systems, and gaming AI tutorials and breakthroughs.",
-    "Generative AI: Includes creating synthetic content like text, images, or videos using models like GANs or transformers. News often reports on tools like ChatGPT, DALL·E, and advancements in generative technologies.",
-    "AI Ethics and Bias: Examines fairness, accountability, and transparency in AI systems. News includes discussions on biased algorithms, ethical guidelines, and the societal impact of AI deployments.",
-    "Autonomous Systems: Explores systems like drones, self-driving cars, and industrial robots that operate without human intervention. Tutorials often focus on combining AI with real-time sensors and decision-making.",
-    "Time-Series Analysis: Focuses on analyzing sequential data like financial trends, weather forecasts, and sensor readings. News highlights innovations in forecasting algorithms and anomaly detection in AI systems.",
-    "Edge AI: Refers to running AI models directly on devices like IoT hardware, smartphones, and sensors. Tutorials highlight applications in low-latency decision-making and privacy-focused AI deployment.",
-    "AI in Healthcare: Covers AI-driven advancements in diagnostics, personalized medicine, medical imaging, and hospital management. News often highlights case studies or breakthrough models improving patient outcomes.",
-    "Explainable AI (XAI): Focuses on making AI decisions interpretable by humans. Tutorials cover methods for visualizing model predictions, and news discusses trust and transparency in AI.",
-    "Federated Learning: Discusses decentralized learning where AI models are trained across devices without sharing raw data. Tutorials emphasize privacy-preserving technologies and collaborative AI systems.",
-    "Self-Supervised Learning: Covers AI models learning from unlabeled data to reduce reliance on manual annotations. News highlights innovations in pretraining techniques for natural language and vision tasks.",
-    "AI in Creative Industries: Focuses on AI applications in art, music, and design. Tutorials often discuss creative tools like AI-assisted image generation and storytelling models.",
-    "ML Infrastructure and Engineering: Covers building scalable systems for training, deploying, and managing AI models. Tutorials focus on topics like MLOps, containerization, and cloud-based AI deployments.",
-    "AI for Social Good: Explores AI used to address global challenges like climate change, disaster response, and education. News features projects leveraging AI for public and environmental benefits.",
-    "Adversarial Learning and Security: Discusses AI systems' robustness against malicious attacks. Tutorials often cover adversarial examples and techniques for securing machine learning models.",
-    "Multimodal AI: Explores AI systems integrating text, images, audio, and video. Tutorials highlight applications like video understanding and multimodal embeddings for richer AI capabilities.",
-    "AI Hardware Optimization: Focuses on hardware like GPUs, TPUs, and edge devices optimized for AI workloads. News includes advancements in hardware-efficient models and AI-specific chips.",
-    "AI in Finance: Covers applications in fraud detection, algorithmic trading, credit risk analysis, and financial forecasting. Tutorials highlight AI tools used for predictive analytics and automation in finance.",
-    "Human-Centered AI: Focuses on designing AI systems that prioritize human collaboration and usability. Tutorials discuss interfaces, accessibility, and aligning AI with user needs.",
-    "Data Science: Encompasses AI-related techniques for analyzing and visualizing data. Tutorials often focus on data preprocessing, feature engineering, and using AI to uncover insights from large datasets."
+    "Natural Language Processing (NLP): human language, sentiment analysis, chatbots, machine translation, text summarization, communication systems.",
+    "Computer Vision: visual data, images, videos. object detection, facial recognition, autonomous vehicles, medical imaging advancements.",
+    "Reinforcement Learning: agents learning, optimal actions, trial-and-error interactions, robotics, autonomous systems, gaming AI.",
+    "Generative AI: synthetic content, text, images, videos, GANs, transformers, ChatGPT, DALL·E, generative",
+    "AI Ethics and Bias: fairness, accountability, transparency in AI systems. biased algorithms, ethical guidelines, societal impact",
+    "Autonomous Systems: drones, self-driving cars, industrial robots, without human intervention, real-time sensors, decision-making.",
+    "Time-Series Analysis: sequential data, financial trends, weather forecasts, sensor readings. forecasting, anomaly detection",
+    "Edge AI: IoT hardware, smartphones,sensors, low-latency, privacy-focused",
+    "AI in Healthcare: diagnostics, personalized medicine, medical imaging, hospital management, patient outcomes.",
+    "Explainable AI (XAI): interpretable, visualizing model predictions, trust, transparency",
+    "Federated Learning: decentralized learning, trained across devices, privacy-preserving, collaborative",
+    "Self-Supervised Learning: unlabeled data, pretraining techniques",
+    "AI in Creative: art, music,design, creative, storytelling",
+    "ML Infrastructure and Engineering: building scalable systems, training, deploying, managing, MLOps, containerization, cloud-based",
+    "AI for Social: global challenges, climate change, disaster response, education. public, environmental",
+    "Multimodal AI: integrating text, images, audio, video. video understanding, multimodal embeddings,richer AI capabilities.",
+    "AI Hardware Optimization: hardware, GPUs, TPUs, workloads, hardware-efficient, AI-specific chips.",
+    "AI in Finance: algorithmic trading, credit risk, financial forecasting, automation in finance.",
+    "Human-Centered AI: human collaboration, usability, interfaces, accessibility, user needs.",
+    "Data Science: analyzing, visualizing data, data preprocessing, feature engineering, insights"
 ]
     # Categorize the content
-    categories = categorizer.categorize(cleaned_text,cand_cat,threshold=0.7,multi_label=True)
+    categories = categorizer.categorize(cleaned_text,cand_cat,threshold=0.5,multi_label=True)
     categories = [categories.split(":")[0] for categories in categories]
     print(categories)
     # Store in Milvus
