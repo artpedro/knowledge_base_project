@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request
 from tests import run_all_tests
+from app.retrieval import retrieve_and_generate
 import subprocess
 import unittest
 import redis
@@ -79,3 +80,20 @@ def scrape_status(job_id):
         return jsonify({"status": "success", "job": job})
     else:
         return jsonify({"status": "error", "message": "Job not found."}), 404
+  
+@main.route("/query", methods=["GET", "POST"])
+def query_page():
+    if request.method == "GET":
+        return render_template("query.html")
+    elif request.method == "POST":
+        data = request.json
+        print('post')
+        user_query = data.get("query")
+        if not user_query:
+            return jsonify({"error": "Query is required"}), 400
+
+        try:
+            response = retrieve_and_generate(user_query)
+            return jsonify({"response": response})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
