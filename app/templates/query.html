@@ -1,56 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+ <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Query Knowledge Base</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
-  <header class="bg-blue-600 text-white py-4">
-    <div class="container mx-auto text-center">
-      <h1 class="text-4xl font-bold">Query Knowledge Base</h1>
-    </div>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+   body {
+            font-family: 'Roboto', sans-serif;
+        }
+        /* Custom scrollbar styles */
+        #response-text::-webkit-scrollbar {
+            width: 8px;
+        }
+        #response-text::-webkit-scrollbar-track {
+            background: #2d3748; /* Tailwind's gray-800 */
+        }
+        #response-text::-webkit-scrollbar-thumb {
+            background-color: #4a5568; /* Tailwind's gray-600 */
+            border-radius: 4px;
+        }
+  </style>
+ </head>
+ <body class="bg-gray-900 text-gray-200 flex flex-col h-screen">
+  <header class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-4 shadow-lg">
+   <div class="container mx-auto text-center">
+    <h1 class="text-4xl font-bold">
+     Query Knowledge Base
+    </h1>
+   </div>
   </header>
-
-  <main class="container mx-auto my-10">
-    <div class="bg-white p-6 shadow-md rounded-lg">
-      <form id="query-form" class="space-y-4">
-        <div>
-          <label for="query" class="block text-lg font-medium text-gray-700">Enter Your Query</label>
-          <input 
-            type="text" 
-            id="query" 
-            name="query" 
-            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
-            placeholder="Ask a question..." 
-            required />
-        </div>
-        <div>
-          <button 
-            type="submit" 
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Submit
-          </button>
-        </div>
-      </form>
-      <div id="response-container" class="mt-6 hidden">
-        <h2 class="text-xl font-semibold text-gray-800">Response:</h2>
-        <p id="response-text" class="mt-2 text-gray-700"></p>
-      </div>
+  <main class="container mx-auto flex-grow flex flex-col justify-center items-center">
+   <div class="bg-gray-800 p-6 shadow-md rounded-lg w-full max-w-3xl">
+    <form class="space-y-4" id="query-form">
+     <div>
+      <label class="block text-lg font-medium text-gray-300" for="query">
+       Enter Your Query
+      </label>
+      <input class="mt-1 block w-full px-4 py-2 border border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-700 text-gray-200" id="query" name="query" placeholder="Ask a question..." required="" type="text"/>
+     </div>
+     <div class="flex justify-end">
+      <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200" type="submit">
+       Submit
+      </button>
+     </div>
+    </form>
+    <div class="mt-6 hidden" id="response-container">
+     <h2 class="text-xl font-semibold text-gray-300">
+      Response:
+     </h2>
+     <div class="mt-2 text-gray-400 bg-gray-700 p-4 rounded-md max-h-96 overflow-y-auto" id="response-text">
+     </div>
     </div>
+   </div>
   </main>
-
-  <footer class="bg-blue-600 text-white py-4">
-    <div class="container mx-auto text-center">
-      <p>© 2023 Knowledge Base App. All rights reserved.</p>
-    </div>
+  <footer class="bg-gray-800 text-white py-4">
+   <div class="container mx-auto text-center">
+    <p>
+     © 2023 Knowledge Base App. All rights reserved.
+    </p>
+   </div>
   </footer>
- <!-- 1. Import Marked.js from a CDN -->
- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
- <script>
-  document.getElementById("query-form").addEventListener("submit", async function (event) {
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
+  </script>
+  <script>
+   document.getElementById("query-form").addEventListener("submit", async function (event) {
     event.preventDefault();
     const query = document.getElementById("query").value;
 
@@ -76,6 +92,6 @@
       document.getElementById("response-text").textContent = "An error occurred.";
     }
   });
-</script>
-</body>
+  </script>
+ </body>
 </html>

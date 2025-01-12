@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
  <head>
   <meta charset="utf-8"/>
@@ -15,70 +16,65 @@
         }
   </style>
  </head>
- <body class="bg-gray-100">
-  <header class="bg-blue-600 text-white py-4">
+ <body class="bg-gray-900 text-gray-200">
+  <header class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-6 shadow-lg">
    <div class="container mx-auto text-center">
-    <h1 class="text-4xl font-bold">
+    <h1 class="text-5xl font-bold">
      Knowledge Base App
     </h1>
    </div>
   </header>
-  <div class="container mx-auto my-10">
+  <main class="container mx-auto my-10">
    <div class="text-center mb-10">
-    <p class="text-xl">
+    <p class="text-lg md:text-xl text-gray-400">
      Welcome to the Knowledge Base App! This app allows you to query, search for categories, and scrape articles about Machine Learning and Artificial Intelligence.
     </p>
    </div>
-   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-     <img alt="Health check illustration with heartbeat and server icons" class="w-full h-48 object-cover" height="400" src="https://storage.googleapis.com/a1aa/image/6LN5H5xF28K6Lx3FlBVTBJFnBS9XtwMOTTnggyuJJ4xz2xfJA.jpg" width="600"/>
+   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+     <img alt="Health check illustration showing a heart and medical symbols" class="w-full h-48 object-cover" src="https://placehold.co/600x400?text=Health+Check"/>
      <div class="p-6">
-      <a class="block text-blue-600 text-lg font-semibold mb-2" href="/health">
+      <a class="block text-blue-400 text-lg font-semibold mb-2" href="/health">
        <i class="fas fa-heartbeat">
        </i>
        Health Check
       </a>
-      <p class="text-gray-700">
+      <p class="text-gray-400">
        Confirm the health of the application and its dependencies.
       </p>
      </div>
     </div>
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-     <img alt="Search functionality illustration with magnifying glass and data icons" class="w-full h-48 object-cover" height="400" src="https://storage.googleapis.com/a1aa/image/G9HYPQrCsZrsNhi3ujqXVCAtN0gpzHSqizgwW12jhfoqtjfTA.jpg" width="600"/>
+    <div class="bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+     <img alt="Search functionality illustration with a magnifying glass and data symbols" class="w-full h-48 object-cover" src="https://placehold.co/600x400?text=Chatbot"/>
      <div class="p-6">
-      <a class="block text-blue-600 text-lg font-semibold mb-2" href="/query">
+      <a class="block text-blue-400 text-lg font-semibold mb-2" href="/query">
        <i class="fas fa-search">
        </i>
        Chatbot
       </a>
-      <p class="text-gray-700">
+      <p class="text-gray-400">
        Ask anything to the IA/ML specialized chatbot.
       </p>
      </div>
     </div>
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-     <img alt="Web scraping illustration with spider and data collection icons" class="w-full h-48 object-cover" height="400" src="https://storage.googleapis.com/a1aa/image/tEmyTUVDCzobB57yHBH7oQvIBl39hJ3GIoBpieP3JIAptjfTA.jpg" width="600"/>
+    <div class="bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+     <img alt="Web scraping illustration with a spider and web" class="w-full h-48 object-cover" src="https://placehold.co/600x400?text=Web+Scraping"/>
      <div class="p-6">
-      <a class="block text-blue-600 text-lg font-semibold mb-2" href="/scrape">
-       <i class="fas fa-spider">
-       </i>
-       <form id="scrape-form" method="POST" action="/scrape">
-        <button 
-            type="submit" 
-            class="bg-blue-600 text-white px-4 py-2 rounded">
-            Trigger Scraper
-        </button>
-    </form>
-      </a>
-      <p class="text-gray-700">
+      <form action="/scrape" id="scrape-form" method="POST">
+       <button class="flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 w-full" type="submit">
+        <i class="fas fa-spider mr-2">
+        </i>
+        Trigger Scraper
+       </button>
+      </form>
+      <p class="text-gray-400 mt-2">
        Trigger the web scraper to collect new data.
       </p>
      </div>
     </div>
-    
    </div>
-  </div>
-  <footer class="bg-blue-600 text-white py-4">
+  </main>
+  <footer class="bg-gray-800 text-white py-4">
    <div class="container mx-auto text-center">
     <p>
      © 2023 Knowledge Base App. All rights reserved.
