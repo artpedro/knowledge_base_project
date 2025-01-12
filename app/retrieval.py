@@ -11,8 +11,7 @@ load_dotenv()
 MILVUS_HOST = "standalone"
 MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-print(OPENAI_API_KEY)
-print(MILVUS_HOST)
+
 collection_name = "ai_ml_knowledge"
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 model = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-4o-mini")
@@ -54,8 +53,6 @@ def retrieve_and_generate(query):
     context = ""
     for i in search_res:
         context += i["text"] + "\n"
-    print(context)
-
     # Generate response
     prompt = PROMPT.format(context=context, question=query)
     response = model.invoke([{"role": "system", "content": prompt}])

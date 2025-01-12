@@ -92,7 +92,6 @@ def query_page():
         return render_template("query.html")
     elif request.method == "POST":
         data = request.json
-        print("post")
         user_query = data.get("query")
         if not user_query:
             return jsonify({"error": "Query is required"}), 400
