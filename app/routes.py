@@ -19,6 +19,7 @@ def home():
     """
     return render_template("home.html")
 
+
 @main.route("/health")
 def health():
     """
@@ -32,7 +33,11 @@ def health():
             "database_tests": results.get("database_tests", "Unknown"),
             "cleaner_tests": results.get("cleaner_tests", "Unknown"),
             "classifier_tests": results.get("classifier_tests", "Unknown"),
-            "status": "Healthy" if all(v == "Passed" for v in results.values()) else "Unhealthy"
+            "status": (
+                "Healthy"
+                if all(v == "Passed" for v in results.values())
+                else "Unhealthy"
+            ),
         }
     except Exception as e:
         status = {"status": "Unhealthy", "error": str(e)}
@@ -69,7 +74,6 @@ def scrape():
         return jsonify({"status": "success", "message": "All spiders triggered."}), 202
 
 
-
 @main.route("/scrape_status/<job_id>", methods=["GET"])
 def scrape_status(job_id):
     """
@@ -80,14 +84,15 @@ def scrape_status(job_id):
         return jsonify({"status": "success", "job": job})
     else:
         return jsonify({"status": "error", "message": "Job not found."}), 404
-  
+
+
 @main.route("/query", methods=["GET", "POST"])
 def query_page():
     if request.method == "GET":
         return render_template("query.html")
     elif request.method == "POST":
         data = request.json
-        print('post')
+        print("post")
         user_query = data.get("query")
         if not user_query:
             return jsonify({"error": "Query is required"}), 400

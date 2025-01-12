@@ -7,10 +7,13 @@
 import redis
 import json
 
+
 class ArticlePipeline:
     def open_spider(self, spider):
         # Connect to Redis
-        self.redis_client = redis.StrictRedis(host="redis", port=6379, decode_responses=True)
+        self.redis_client = redis.StrictRedis(
+            host="redis", port=6379, decode_responses=True
+        )
 
     def process_item(self, item, spider):
         # Prepare data for queuing
@@ -20,7 +23,6 @@ class ArticlePipeline:
             "date": item["date"],
             "text": item["text"],
             "url": item["url"],
-
         }
         print("pushing to queue")
         # Push data to the Redis queue

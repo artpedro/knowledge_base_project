@@ -1,6 +1,7 @@
 import re
 import string
 
+
 class TextCleaner:
     @staticmethod
     def clean_text(text):

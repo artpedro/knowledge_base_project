@@ -1,6 +1,7 @@
 import unittest
 import uuid
 import sys, os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from app.milvus_handler.milvus_client import MilvusClient
 from pymilvus import utility
@@ -12,7 +13,9 @@ class TestMilvusClient(unittest.TestCase):
         """
         Set up the Milvus client and clear the test collection before tests.
         """
-        test_collection_name = f"test_collection_{uuid.uuid4().hex[:8]}"  # Unique collection name
+        test_collection_name = (
+            f"test_collection_{uuid.uuid4().hex[:8]}"  # Unique collection name
+        )
         cls.client = MilvusClient(collection_name=test_collection_name)
         cls.client.clear_collection()  # Clear the collection to start fresh
         cls.test_titles = ["Test Title 1", "Test Title 2"]
@@ -39,10 +42,10 @@ class TestMilvusClient(unittest.TestCase):
             author="Test Author",
             date="01-01-2023",
             text="This is a test text.",
-            categories=["Category1", "Category2"]
+            categories=["Category1", "Category2"],
         )
         self.assertEqual(result["status"], "success")
-        
+
     def test_duplicate_detection(self):
         """
         Test that duplicates are correctly detected and skipped.
@@ -82,6 +85,7 @@ class TestMilvusClient(unittest.TestCase):
         if utility.has_collection(cls.client.collection_name):
             utility.drop_collection(cls.client.collection_name)
             print(f"[INFO] Test collection '{cls.client.collection_name}' dropped.")
+
 
 if __name__ == "__main__":
     unittest.main()

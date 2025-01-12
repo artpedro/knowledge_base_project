@@ -1,12 +1,19 @@
-
 from datetime import datetime
 from dateutil import parser
-from pymilvus import connections, Collection, FieldSchema, CollectionSchema, DataType, utility
+from pymilvus import (
+    connections,
+    Collection,
+    FieldSchema,
+    CollectionSchema,
+    DataType,
+    utility,
+)
 from sentence_transformers import SentenceTransformer
 from datetime import datetime
 import logging
 import time
 import os
+
 
 class MilvusClient:
     def __init__(self, host=None, port=None, collection_name="ai_ml_knowledge"):
@@ -14,7 +21,9 @@ class MilvusClient:
         self.port = port or os.getenv("MILVUS_PORT", "19530")
         self.collection_name = collection_name
         self.dimension = 384  # Embedding vector dimension
-        self.embedder = SentenceTransformer("all-MiniLM-L6-v2")  # Pre-trained model for embeddings
+        self.embedder = SentenceTransformer(
+            "all-MiniLM-L6-v2"
+        )  # Pre-trained model for embeddings
         self._connect()
         self._ensure_collection_ready()
 
@@ -46,18 +55,27 @@ class MilvusClient:
         Ensures the collection is created, indexed, and loaded into memory.
         """
         if not utility.has_collection(self.collection_name):
-            logging.info(f"Collection '{self.collection_name}' does not exist. Creating...")
+            logging.info(
+                f"Collection '{self.collection_name}' does not exist. Creating..."
+            )
             # Define the schema for the collection
             fields = [
-                FieldSchema(name="id", dtype=DataType.INT64, is_primary=True, auto_id=True),
+                FieldSchema(
+                    name="id", dtype=DataType.INT64, is_primary=True, auto_id=True
+                ),
                 FieldSchema(name="title", dtype=DataType.VARCHAR, max_length=1024),
                 FieldSchema(name="author", dtype=DataType.VARCHAR, max_length=200),
                 FieldSchema(name="date", dtype=DataType.VARCHAR, max_length=10),
                 FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=20000),
                 FieldSchema(name="categories", dtype=DataType.JSON),
-                FieldSchema(name="vector", dtype=DataType.FLOAT_VECTOR, dim=self.dimension),
+                FieldSchema(
+                    name="vector", dtype=DataType.FLOAT_VECTOR, dim=self.dimension
+                ),
             ]
-            schema = CollectionSchema(fields=fields, description="Knowledge collection with metadata and vector embeddings")
+            schema = CollectionSchema(
+                fields=fields,
+                description="Knowledge collection with metadata and vector embeddings",
+            )
             Collection(name=self.collection_name, schema=schema)
             logging.info(f"Collection '{self.collection_name}' created.")
         else:
@@ -68,7 +86,11 @@ class MilvusClient:
         # Check if an index exists, create it if missing
         if not collection.has_index():
             logging.info("Index not found. Creating index...")
-            index_params = {"index_type": "IVF_FLAT", "metric_type": "L2", "params": {"nlist": 128}}
+            index_params = {
+                "index_type": "IVF_FLAT",
+                "metric_type": "L2",
+                "params": {"nlist": 128},
+            }
             collection.create_index(field_name="vector", index_params=index_params)
             logging.info("Index creation initiated. Waiting for completion...")
 
@@ -153,18 +175,20 @@ class MilvusClient:
 
         formatted_results = []
         for result in results[0]:
-            formatted_results.append({
-                "title": result.entity.title,
-                "author": result.entity.author,
-                "date": result.entity.date,
-                "text": result.entity.text,
-                "categories": result.entity.categories,
-                "distance": result.distance,
-            })
+            formatted_results.append(
+                {
+                    "title": result.entity.title,
+                    "author": result.entity.author,
+                    "date": result.entity.date,
+                    "text": result.entity.text,
+                    "categories": result.entity.categories,
+                    "distance": result.distance,
+                }
+            )
 
         logging.info("Search completed.")
         return formatted_results
-    
+
     def check_text_existence(self, text, similarity_threshold=0.9):
         """
         Checks if the provided text has a similar instance in the database.
@@ -183,19 +207,21 @@ class MilvusClient:
         query_vector = self.embedder.encode(text).tolist()
 
         # Search for the most similar text
-        search_params = {"metric_type": "L2", "params": {"nprobe": 10}}  
+        search_params = {"metric_type": "L2", "params": {"nprobe": 10}}
         collection = Collection(self.collection_name)
         results = collection.search(
             data=[query_vector],
             anns_field="vector",
             param=search_params,
             limit=1,  # Only return the most similar result
-            output_fields=["text", "title", "author", "date", "categories"]
+            output_fields=["text", "title", "author", "date", "categories"],
         )
 
         if results[0]:
             top_result = results[0][0]  # Get the top result
-            similarity_score = 1 - top_result.distance  # Convert distance to similarity score for IP metric
+            similarity_score = (
+                1 - top_result.distance
+            )  # Convert distance to similarity score for IP metric
 
             if similarity_score >= similarity_threshold:
                 return {
@@ -204,10 +230,11 @@ class MilvusClient:
                     "author": top_result.entity.get("author"),
                     "date": top_result.entity.get("date"),
                     "categories": top_result.entity.get("categories"),
-                    "similarity_score": similarity_score
+                    "similarity_score": similarity_score,
                 }
 
         return None  # No similar text found above the threshold
+
     def count_documents(self):
         """
         Counts the number of documents in the collection.
@@ -236,9 +263,7 @@ if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s]: %(message)s",
-        handlers=[
-            logging.StreamHandler()
-        ]
+        handlers=[logging.StreamHandler()],
     )
 
     client = MilvusClient()
@@ -249,10 +274,12 @@ if __name__ == "__main__":
     texts = [
         "This is the forth text.",
         "This is the fifth text.",
-        "This is the sixth text about Milvus."
+        "This is the sixth text about Milvus.",
     ]
     inserted_count, skipped_count = client.insert_data(titles, texts)
-    print(f"[INFO] Inserted {inserted_count} documents, skipped {skipped_count} duplicates.")
+    print(
+        f"[INFO] Inserted {inserted_count} documents, skipped {skipped_count} duplicates."
+    )
 
     # Search for similar text
     print("\n[INFO] Searching for documents similar to a query text...")

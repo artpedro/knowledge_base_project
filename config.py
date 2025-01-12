@@ -1,5 +1,6 @@
 import os
 
+
 class Config:
     DEBUG = os.getenv("DEBUG", "False") == "True"
     SECRET_KEY = os.getenv("SECRET_KEY", "your_default_secret")

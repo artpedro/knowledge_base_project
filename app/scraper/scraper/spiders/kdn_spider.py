@@ -1,17 +1,17 @@
 import scrapy
 from datetime import datetime
 
+
 class KDnuggetsSpider(scrapy.Spider):
     name = "kdnuggets"
     allowed_domains = ["kdnuggets.com"]
     start_urls = ["https://www.kdnuggets.com/news/index.html"]
-    
+
     title_selector = "div.li-has-thumb__content a b::text"  # Extracts the title
     author_selector = "div.author-link strong a::text"  # Extracts the author's name
     date_selector = "div.author-link::text"
-    
-    text_selector = '#post-'
-        
+
+    text_selector = "#post-"
 
     custom_settings = {
         "DEFAULT_REQUEST_HEADERS": {
@@ -34,8 +34,9 @@ class KDnuggetsSpider(scrapy.Spider):
             # Extract metadata directly from the index page
             title = article.css(self.title_selector).get()
             author = article.css(self.author_selector).get()
-            date = self.format_date(self.extract_date(article.css(self.date_selector).getall()))
-        
+            date = self.format_date(
+                self.extract_date(article.css(self.date_selector).getall())
+            )
 
             # Pass the extracted metadata via response meta
             meta = {
@@ -47,18 +48,18 @@ class KDnuggetsSpider(scrapy.Spider):
             # Follow the article link to extract full content
             if article_url:
                 yield response.follow(article_url, self.parse_article, meta=meta)
-    
+
     def parse_article(self, response):
         """
         Extract the full article content and combine it with metadata from the index.
         """
-        
+
         item = {
             "title": response.meta.get("title"),
             "author": response.meta.get("author"),
             "date": response.meta.get("date"),
             "url": response.url,
-            "text":''
+            "text": "",
         }
         paragraph_texts = response.css(self.text_selector).get()
 
@@ -70,10 +71,10 @@ class KDnuggetsSpider(scrapy.Spider):
     def extract_date(self, text_parts):
         """Helper function to parse the date from metadata"""
         for part in text_parts:
-            if 'on' in part:  # Assuming the date starts after 'on'
-                return part.strip().split('on')[-1].strip().rstrip(' in')
+            if "on" in part:  # Assuming the date starts after 'on'
+                return part.strip().split("on")[-1].strip().rstrip(" in")
         return None
-    
+
     def format_date(self, date_text):
         """Helper function to format date into dd-mm-yyyy"""
         try:

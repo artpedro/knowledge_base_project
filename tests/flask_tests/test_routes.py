@@ -1,6 +1,7 @@
 import unittest
 from run import create_app
 
+
 class TestRoutes(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
@@ -14,9 +15,10 @@ class TestRoutes(unittest.TestCase):
         response = self.client.post("/scrape", json={"url": "http://example.com"})
         self.assertEqual(response.status_code, 202)
 
-    def test_scrape_status(self):   
+    def test_scrape_status(self):
         response = self.client.get("/scrape_status/job_1")
         self.assertIn("status", response.json)
+
 
 if __name__ == "__main__":
     unittest.main()

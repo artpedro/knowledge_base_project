@@ -1,4 +1,3 @@
-
 from langchain_openai import ChatOpenAI
 from sentence_transformers import SentenceTransformer
 import os
@@ -9,7 +8,7 @@ from app.milvus_handler.milvus_client import MilvusClient
 load_dotenv()
 
 # Constants for configuration
-MILVUS_HOST = 'standalone'
+MILVUS_HOST = "standalone"
 MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 print(OPENAI_API_KEY)
@@ -17,7 +16,7 @@ print(MILVUS_HOST)
 collection_name = "ai_ml_knowledge"
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 model = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-4o-mini")
-    
+
 PROMPT = """
 Use the following pieces of information enclosed in <context> tags to provide an answer to the question enclosed in <question> tags.
 <context>
@@ -28,12 +27,14 @@ Use the following pieces of information enclosed in <context> tags to provide an
 </question>
 """
 
+
 def initialize_milvus_vectorstore():
     """
     Initialize the Milvus vector store using LangChain integration.
     """
     milvus = MilvusClient(host=MILVUS_HOST, port=MILVUS_PORT)
     return milvus
+
 
 def retrieve_and_generate(query):
     """

@@ -1,6 +1,7 @@
 import unittest
 from app.cleaner.cleaner import TextCleaner
 
+
 class TestTextCleaner(unittest.TestCase):
     def setUp(self):
         self.cleaner = TextCleaner()
@@ -19,6 +20,7 @@ class TestTextCleaner(unittest.TestCase):
         text = "  This    is   spaced out.   "
         cleaned = self.cleaner.clean_text(text)
         self.assertEqual(cleaned, "This is spaced out.")
+
 
 if __name__ == "__main__":
     unittest.main()
